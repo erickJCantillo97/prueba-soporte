@@ -94,9 +94,34 @@ Los errores encontrados los dividiré en secciones para que sea facil de identif
 ## Errores de Back-end
 
 1. **Error de Base de datos**
-- El sistema esta trabajando en la gestion de tareas por usuario pero en el modelo la tabla donde se hace referecia es la tabla *users* pero en la migración se contruye una tabe *user*, por lo tanto hice el cambio al nombre corrrecto de la tabla y corregí la referencia en la tabla tasks 
+- El sistema esta trabajando en la gestión de tareas por usuario pero en el modelo la tabla donde se hace referecia es la tabla *users* pero en la migración se contruye una tabe *user*, por lo tanto hice el cambio al nombre corrrecto de la tabla y corregí la referencia en la tabla tasks 
 
 2. El back-end no tenia una ruta para obtener las tareas de la base de datos, por lo que le informacion no percitia mas alla del Store
 
+3. Los datos del usuario que solicitaba el back para crear un a tarea no estaban acordes al modelo que se presentó ya que deberia solicitar el id unico de cada usuario.
+
+4. Use el antiguo metodo para creación de rutas en el back-end, eso no debe afectar la funcionalidad del sistema, pero la versión de laravel que se usó en este proyecto tiene mejor obtimizadas esa forma.
+
+5. No existia una forma de crear nuevos usuario (No me di a la tarea de dar la opcion de actulizar dichos usuario por efectos del alcance de esta prueba).
+
+6. El back no devolvia el listado de los usuario existentes en la base de datos, de ese modo al usuario le seria mas dificil encontrar los usuarios para añadirle una nueva tarea.
+
+7. Apesar que la funcionalidad es la misma Laravel en su version 7, ya podia añadir relaciones directas con el Modelo para refactorizar el codigo facilemte (el model usuario usaba el string del nombre de la calse en vez de la clase)
+
+8. No existia una ruta que me devolviera todas las tareas con el usuario asignado
+
 ## Errores de Front-end
+
+
+1. No se estaban haciendo consultas para traer la informacion de la base de datos, todo se guardaba en memoria
+
+2. El listado de tareas crecia indefinidamente, ocultando el formulario para la creacion de las mismas lo que hice fue poner el formulario primero y añadir un overflow y un tamaño fijo al div donde esta la lista de tareas.
+
+3. Se solicitaba el nombre o correo del usuario, pero eso seria dificil de encontralos en la BD, lo que hice fue cambiar ese input por un selec para que se seleccione uno de la base de datos
+
+4. Añadí un modal para la creacion de los usuario nuevos para matenernos en la seccion de una SPA.
+
+5. No existia un boton para editar las tareas
+
+
    
