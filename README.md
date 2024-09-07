@@ -81,4 +81,22 @@ Puedes añadir cualquier comentario adicional sobre las decisiones que tomaste a
 Recuerda que el objetivo es demostrar tu capacidad para depurar y mejorar código existente.
 
 ¡Buena suerte!
+
+
+# Apartir de Aqui inician las notas del Desarrollador
+
+En primer lugar gracias por la oportunidad nuevamente.
+
+como primera obersavación note que el proyecto esta basa de laravel 7, siendo que este esta en su version 11, y usa php version ^7.1, siendo que este mismo ya esta en la version 8.3, como no sabia si el objetivo de esta prueba tambien era hacer a actualización me abstube de realizarla y en su lugar use una instancia con las versiones que sokicita la prueba (Espero eso no sea un problema, mas adelante).
+
+Los errores encontrados los dividiré en secciones para que sea facil de identificar
+
+## Errores de Back-end
+
+1. **Error de Base de datos**
+- El sistema esta trabajando en la gestion de tareas por usuario pero en el modelo la tabla donde se hace referecia es la tabla *users* pero en la migración se contruye una tabe *user*, por lo tanto hice el cambio al nombre corrrecto de la tabla y corregí la referencia en la tabla tasks 
+
+2. El back-end no tenia una ruta para obtener las tareas de la base de datos, por lo que le informacion no percitia mas alla del Store
+
+## Errores de Front-end
    

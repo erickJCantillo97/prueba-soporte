@@ -8,54 +8,78 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
+    // Listar tareas
+    public function index()
+    {
+        $tasks = Task::with('user')->get();
+        if(request('state') == 'Completed')
+            $tasks = $tasks->where('completed', 1);
+        if(request('state') == 'Pending')
+            $tasks = $tasks->where('completed', 0);
+        return response()->json($tasks);
+    }
+
+
     // Crear tarea
     public function store(Request $request)
     {
         $validated = $request->validate([
             'title' => 'required|max:255',
             'description' => 'required|max:500',
-            'user' => 'required|max:500',
+            'user' => 'required|integer|exists:users,id',
         ]);
+        try {
+            $task = Task::create([
+                'title' => $validated['title'],
+                'description' => $validated['description'],
+                'user_id' => $validated['user'],
+            ]);
 
-        $task = new Task($validated);
-        $user = User::where('email',$validated['user'])->first();
-        $task->user_id = $user->id;
-        $task->save();
-
-        return redirect()->back()->with('success', 'Task created successfully.');
+            return response()->json([
+                'message' => 'Task created successfully',
+                'task' => $task
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     // Actualizar tarea
-    public function update(Request $request, $id)
+    public function update(Request $request, Task $task)
     {
 
         $validated = $request->validate([
             'title' => 'required|max:255',
             'description' => 'required|max:500',
         ]);
-
-        $task = Task::find($id);
-
-        if(!$task) {
-            return redirect()->back()->with('error', 'Task not found.');
+        try
+        {
+            $task->update($validated);
+            return response()->json([
+                'message' => 'Task updated successfully',
+                'task' => $task
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
-
-        // Corrección: Se actualiza la tarea con datos validados.
-        $task->update($validated);
-        return redirect()->back()->with('success', 'Task updated successfully.');
+       
     }
 
     // Eliminar tarea
-    public function destroy($id)
+    public function destroy(Task $task)
     {
-        $task = Task::find($id);
-
-        if(!$task) {
-            return redirect()->back()->with('error', 'Task not found.');
-        }
-
         $task->delete();
+        return response()->json([
+            'message' => 'Task deleted successfully',
+        ]);
+    }
 
-        return redirect()->back()->with('success', 'Task deleted successfully.');
+    public function complete(Task $task)
+    {
+        $task->completed = !$task->completed;
+        $task->save();
+        return response()->json([
+            'message' => 'Task completed successfully',
+        ]);
     }
 }
